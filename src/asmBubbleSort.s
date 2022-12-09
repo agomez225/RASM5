@@ -16,17 +16,19 @@ asmBubbleSort:
 
 asm_outerLoop:
     
-    add x2, x2, #1
     cmp x2, x1
     b.eq asm_return
+    add x2, x2, #1
     mov x3, #0
 
+    // condition for inner loop
 asm_innerLoop:
                     // for (j = 0; j < length - i - 1; j++)
+                    // x8 holds length - i - 1
+    cmp x8, x3
+    b.lt asm_outerLoop
     sub x8, x1, x2
     sub x8, x8, #1
-    cmp x3, x8
-    b.eq asm_outerLoop
 
                     // x6 = &array[j]
     add x6, x0, x3, LSL #2
