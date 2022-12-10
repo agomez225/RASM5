@@ -11,11 +11,16 @@ asmBubbleSort:
     // x6 = &array[j]
     // x7 = &array[j+1]
 
+                // clearing registers
     mov x2, #0
     mov x3, #0
+                // prepping registers for first loop
+    sub x8, x1, x2
+    sub x8, x8, #1
+    b asm_outerLoop
 
 asm_outerLoop:
-    
+                // for (int i =0; i < length; i++)
     cmp x2, x1
     b.eq asm_return
     add x2, x2, #1
@@ -25,36 +30,39 @@ asm_outerLoop:
 asm_innerLoop:
                     // for (j = 0; j < length - i - 1; j++)
                     // x8 holds length - i - 1
-    cmp x8, x3
-    b.lt asm_outerLoop
-    sub x8, x1, x2
-    sub x8, x8, #1
 
                     // x6 = &array[j]
     add x6, x0, x3, LSL #2
                     // x4 = *array[j]
-    ldr x4, [x6]
+    ldr w4, [x6]
 
     add x3, x3, #1
                     // x7 = &array[j+1]
     add x7, x0, x3, LSL #2
                     // x5 = *array[j+1]
-    ldr x5, [x7]
+    ldr w5, [x7]
 
-    cmp x5, x4
-    b.gt swap
-    b asm_innerLoop
-
-
-    
-swap:
-    // x10 = temp 
-    ldr x10, [x6]
-
+    cmp x4, x5
+                    // if x4 < x5 don't swap
+    b.le asm_noSwap
+                    // swapping takes place here
+                    // x10 = temp register
+    ldr w10, [x6]
+                    
     str w5, [x6]
     str w10, [x7]
+    b asm_noSwap
 
-    b asm_innerLoop
+asm_noSwap:
+
+    cmp x3, x8
+    b.lt asm_innerLoop
+                    // if j < length - i - i; keep looping, otherwise decrement counters
+    
+    sub x8, x1, x2
+    sub x8, x8, #1
+
+    b asm_outerLoop
 
 asm_return:
     ret
