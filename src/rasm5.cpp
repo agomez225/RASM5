@@ -9,9 +9,14 @@ using namespace std;
 int SIZE = 200000;
 extern "C" void asmBubbleSort(int*, int);
 extern "C" void asmInsertionSort(int*, int);
-long int cBubbleSort (int a[], int length);
+
+long int cBubbleSort(int a[], int length);
+long int cInsertionSort(int a[], int length);
+
 long int asmBubbleSortw(int*, int);
-void populateArrays(int*, int*, int*, int&);
+long int asmInsertionSortw(int*, int);
+
+void populateArrays(int*, int*, int*, int*, int*, int&);
 
 
 int main()
@@ -19,28 +24,22 @@ int main()
 
     int elementCount = 0;
     long int cBubbleTime = 0;
-    long int asmBubbleTime = 0;
     long int cInsTime = 0;
+    long int asmBubbleTime = 0;
     long int asmInsTime = 0;
     char input = '\0';
 
     int arr[SIZE];
-    int asmArr[SIZE];
-    int cArr[SIZE];
+    int asmBubArr[SIZE];
+    int asmInsArr[SIZE];
+    int cBubArr[SIZE];
+    int cInsArr[SIZE];
 
-    int testArr[10] = {2, 93, 38, 7, 12, 88, 93, 200, 1, 5};
     
-    asmInsertionSort(testArr, 10);
 
-    for (int i = 0; i < 10; i++)
+    do
     {
-        cout << testArr[i] << endl;
-    }
-
-
-    /*do
-    {
-        //cout << "\033[2J\033[1;1H";
+        cout << "\033[2J\033[1;1H";
         cout << "\tRASM5 C vs Assembly\n\tFile Element Count: " << elementCount <<endl;
         cout << "-----------------------------------------------\n";
         cout << "C\t Bubblesort Time: " << cBubbleTime << " secs\n";
@@ -61,25 +60,24 @@ int main()
 
     switch (input)
         {
-        case '1': populateArrays(arr, asmArr, cArr, elementCount);
+        case '1': populateArrays(arr, asmBubArr, asmInsArr, cBubArr, cInsArr, elementCount);
                   break;
         
-        case '2': cBubbleTime = cBubbleSort(cArr, SIZE);
+        case '2': cBubbleTime = cBubbleSort(cBubArr, SIZE);
                   break;
 
-        case '3': asmBubbleTime = asmBubbleSortw(asmArr, SIZE);
+        case '3': asmBubbleTime = asmBubbleSortw(asmBubArr, SIZE);
                   break;
 
-        case '4': cout << "case 4";
+        case '4': cInsTime = cInsertionSort(cInsArr, SIZE);
                   break;
 
-        case '5': cout << "case 5";
+        case '5': asmInsTime = asmInsertionSortw(asmInsArr, SIZE);
                   break;
         }
 
 
     }while (input != '6');
-*/
 
     return 0;
 }
@@ -107,7 +105,7 @@ long int cBubbleSort (int a[], int length)
   auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
 
     ofstream cFile;
-    cFile.open("./numbers/cSorted.txt", ios::out | ios::trunc);
+    cFile.open("./numbers/cBubbleSort.txt", ios::out | ios::trunc);
     if (cFile.is_open())
     {
         for (i = 0; i < length; i++)
@@ -129,7 +127,7 @@ long int asmBubbleSortw(int* arr, int size)
     
 
     ofstream asmFile;
-    asmFile.open("./numbers/asmSorted.txt", ios::out | ios::trunc);
+    asmFile.open("./numbers/asmBubbleSort.txt", ios::out | ios::trunc);
     if (asmFile.is_open())
     {
         for (int i = 0; i < size; i++)
@@ -140,7 +138,7 @@ long int asmBubbleSortw(int* arr, int size)
 return duration.count();
 }
 
-void populateArrays(int* arr, int* asmArr, int* cArr, int&elementCount)
+void populateArrays(int* arr, int* asmBubArray, int* asmInsArray,  int* cBubArray, int* cInsArray,  int& elementCount)
 {
 
     ifstream file;
@@ -158,12 +156,68 @@ void populateArrays(int* arr, int* asmArr, int* cArr, int&elementCount)
     
     for (int i= 0; i < SIZE; i++) 
     {
-        asmArr[i] = arr[i];
-        cArr[i] = arr[i];
+        asmBubArray[i] = arr[i];
+        cBubArray[i] = arr[i];
+        asmInsArray[i] = arr[i];
+        cInsArray[i] = arr[i];
     }
     elementCount-= 1;
 }
 
+long int cInsertionSort (int a[], int length)
+{
+  auto start = std::chrono::high_resolution_clock::now();
+    
+  int i, temp, j;
+  for (int i = 1; i < length; i++)
+  {
+      temp = a[i];
+      j = i-1;
+
+      while (j >= 0 && temp < a[j])
+      {
+          a[j+1] = a[j];
+          j = j-1;
+      }
+
+      a[j+1] = temp;
+  }
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+
+    ofstream cFile;
+    cFile.open("./numbers/cInsertionSort.txt", ios::out | ios::trunc);
+    if (cFile.is_open())
+    {
+        for (i = 0; i < length; i++)
+            cFile << a[i] << '\n';
+
+    }
+    cFile.close();
+
+return duration.count();
+
+}
+
+long int asmInsertionSortw(int* arr, int size)
+{
+  auto start = std::chrono::high_resolution_clock::now();
+  asmInsertionSort(arr, size);
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+    
+
+    ofstream asmFile;
+    asmFile.open("./numbers/asmInsertionSort.txt", ios::out | ios::trunc);
+    if (asmFile.is_open())
+    {
+        for (int i = 0; i < size; i++)
+            asmFile << arr[i] << '\n';
+    }
+    asmFile.close();
+
+return duration.count();
+}
 
 
 
