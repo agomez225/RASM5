@@ -1,3 +1,16 @@
+// Attached: RASM5.cpp, asmBubbleSort.s , asmInsertionSort.s
+// ==============================================================
+//Program: RASM5
+// ===============================================================
+//Programmer: Adrian Gomez
+//Class: CS3B - 3:30 to 5:30 PM
+// ================================================================
+//Description:
+// This assignment consisted of the creation of a menu driven program in C/C++ that aims
+// to demonstrate calling Assembly language macros from C/C++. There is no automatic laoding, only via the menu.
+// There is an input file "input.txt" with 200,000 random integers that will be read from.
+// Finally, after every sort, an array of sorted numbers will be written to a text file named after it's respective sort
+//==================================================================
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
