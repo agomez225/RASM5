@@ -149,7 +149,7 @@ void populateArrays(int* arr, int* asmBubArray, int* asmInsArray,  int* cBubArra
     ifstream file;
 
     int temp =0;
-    file.open("./numbers/numbers.txt", ios::in);
+    file.open("./numbers/sorted/numbers.txt", ios::in);
     while (!file.eof())
     {
         file >> temp;
