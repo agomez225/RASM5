@@ -16,6 +16,7 @@
 #include <fstream>
 #include <chrono>
 #include <string>
+#include <unistd.h>
 
 using namespace std;
 
@@ -30,6 +31,9 @@ long int asmBubbleSortw(int*, int);
 long int asmInsertionSortw(int*, int);
 
 void populateArrays(int*, int*, int*, int*, int*, int&);
+
+void printMenu(int, long int, long int, long int, long int, int);
+void doAll(int*, int*, int*, int*, int*, int, long int, long int, long int, long int);
 
 
 int main()
@@ -48,26 +52,11 @@ int main()
     int cBubArr[SIZE];
     int cInsArr[SIZE];
 
-    
+        
 
     do
-    {
-        cout << "\033[2J\033[1;1H";
-        cout << "\tRASM5 C vs Assembly\n\tFile Element Count: " << elementCount <<endl;
-        cout << "-----------------------------------------------\n";
-        cout << "C\t Bubblesort Time: " << cBubbleTime << " secs\n";
-        cout << "Assembly Bubblesort Time: " << asmBubbleTime << " secs\n";
-        cout << "\nC\t Insertion sort Time: " << cInsTime << " secs\n";
-        cout << "Assembly Insertion sort Time: " << asmInsTime << " secs\n";
-        cout << "-----------------------------------------------\n";
-
-        cout << "<1> Load input file (integers)\n";
-        cout << "<2> Sort using C Bubblesort algorithm\n";
-        cout << "<3> Sort using Assembly Bubblesort algorithm\n";
-        cout << "<4> Sort using C Insertion sort algorithm\n";
-        cout << "<5> Sort using Assembly insertion Sort algorithm\n";
-        cout << "<6> Quit\n";
-        cout << "\n\tSelect a number: ";
+{
+    printMenu(elementCount, cBubbleTime, cInsTime, asmBubbleTime, asmInsTime, 1);
 
     cin >> input;
 
@@ -87,10 +76,13 @@ int main()
 
         case '5': asmInsTime = asmInsertionSortw(asmInsArr, SIZE);
                   break;
+
+        case '6': doAll(arr, asmBubArr, asmInsArr, cBubArr, cInsArr, elementCount, cBubbleTime, cInsTime, asmBubbleTime, asmInsTime); 
+                  return 0;
         }
 
 
-    }while (input != '6');
+}while (input != '7');
 
     return 0;
 }
@@ -232,7 +224,52 @@ long int asmInsertionSortw(int* arr, int size)
 return duration.count();
 }
 
+void printMenu(int elementCount, long int cBubbleTime, long int asmBubbleTime, long int cInsTime, long int asmInsTime, int options)
+{
+        cout << "\033[2J\033[1;1H";
+        cout << "\tRASM5 C vs Assembly\n\tFile Element Count: " << elementCount <<endl;
+        cout << "-----------------------------------------------\n";
+        cout << "C\t Bubblesort Time: " << cBubbleTime << " secs\n";
+        cout << "Assembly Bubblesort Time: " << asmBubbleTime << " secs\n";
+        cout << "\nC\t Insertion sort Time: " << cInsTime << " secs\n";
+        cout << "Assembly Insertion sort Time: " << asmInsTime << " secs\n";
+        cout << "-----------------------------------------------\n";
 
+        if (options ==1)
+        {
+        cout << "<1> Load input file (integers)\n";
+        cout << "<2> Sort using C Bubblesort algorithm\n";
+        cout << "<3> Sort using Assembly Bubblesort algorithm\n";
+        cout << "<4> Sort using C Insertion sort algorithm\n";
+        cout << "<5> Sort using Assembly insertion Sort algorithm\n";
+        cout << "<6> Do all of the above in order\n";
+        cout << "<7> Quit\n";
+        cout << "\n\tSelect a number: ";
+        }
+}
 
+    void doAll(int* arr, int* asmBubArr, int* asmInsArr, int* cBubArr, int* cInsArr, int elementCount,
+    long int cBubbleTime, long int cInsTime, long int asmBubbleTime, long int asmInsTime)
+{
+    populateArrays(arr, asmBubArr, asmInsArr, cBubArr, cInsArr, elementCount);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+    cout << "\n\n\n\tRunning C Bubble Sort";
+    cBubbleTime = cBubbleSort(cBubArr, SIZE);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+    cout << "\n\n\n\tRunning ASM Bubble Sort";
+    asmBubbleTime = asmBubbleSortw(asmBubArr, SIZE);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+    cout << "\n\n\n\tRunning C Insertion Sort";
+    cInsTime = cInsertionSort(cInsArr, SIZE);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+    cout << "\n\n\n\tRunning asm Insertion Sort";
+    asmInsTime = asmInsertionSortw(asmInsArr, SIZE);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+}
 
 
