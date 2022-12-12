@@ -254,21 +254,37 @@ void printMenu(int elementCount, long int cBubbleTime, long int asmBubbleTime, l
     populateArrays(arr, asmBubArr, asmInsArr, cBubArr, cInsArr, elementCount);
     printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
 
-    cout << "\n\n\n\tRunning C Bubble Sort";
     cBubbleTime = cBubbleSort(cBubArr, SIZE);
     printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
 
-    cout << "\n\n\n\tRunning ASM Bubble Sort";
     asmBubbleTime = asmBubbleSortw(asmBubArr, SIZE);
     printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
 
-    cout << "\n\n\n\tRunning C Insertion Sort";
     cInsTime = cInsertionSort(cInsArr, SIZE);
     printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
 
-    cout << "\n\n\n\tRunning asm Insertion Sort";
     asmInsTime = asmInsertionSortw(asmInsArr, SIZE);
     printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime, asmInsTime, 0);
+
+// writing results to txt file 
+    ofstream rFile;
+    rFile.open("./results.txt", ios::out | ios::trunc);
+    if (rFile.is_open())
+    {
+
+        rFile << "\tRASM5 C vs Assembly\n\tFile Element Count: " << elementCount <<endl;
+        rFile << "-----------------------------------------------\n";
+        rFile << "C\t Bubblesort Time: " << cBubbleTime << " secs\n";
+        rFile << "Assembly Bubblesort Time: " << asmBubbleTime << " secs\n";
+        rFile << "\nC\t Insertion sort Time: " << cInsTime << " secs\n";
+        rFile << "Assembly Insertion sort Time: " << asmInsTime << " secs\n";
+        rFile << "-----------------------------------------------\n";
+    }
+    rFile.close();
+
+
+
+
 
 }
 
