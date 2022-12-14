@@ -34,20 +34,20 @@ asm_innerLoop:
                     // x6 = &array[j]
     add x6, x0, x3, LSL #2
                     // x4 = *array[j]
-    ldr w4, [x6]
+    ldtrsw x4, [x6]
 
     add x3, x3, #1
                     // x7 = &array[j+1]
     add x7, x0, x3, LSL #2
                     // x5 = *array[j+1]
-    ldr w5, [x7]
+    ldtrsw x5, [x7]
 
     cmp x4, x5
                     // if x4 < x5 don't swap
     b.le asm_noSwap
                     // swapping takes place here
                     // x10 = temp register
-    ldr w10, [x6]
+    ldtrsw x10, [x6]
                     
     str w5, [x6]
     str w10, [x7]

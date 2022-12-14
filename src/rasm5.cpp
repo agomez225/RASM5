@@ -56,7 +56,7 @@ int main()
 
     do
 {
-    printMenu(elementCount, cBubbleTime, cInsTime, asmBubbleTime, asmInsTime, 1);
+    printMenu(elementCount, cBubbleTime, asmBubbleTime, cInsTime,  asmInsTime, 1);
 
     cin >> input;
 

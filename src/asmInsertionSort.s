@@ -29,7 +29,7 @@ jloop:              // while j >=0
     add x9, x0, x3, LSL #2 
 
                     // x9 <- array[4*j]
-    ldr w9, [x9] 
+    ldtrsw x9, [x9] 
 
                     // temp < array[4*j] ?
     cmp x10, x9 
